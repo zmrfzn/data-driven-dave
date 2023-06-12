@@ -1,76 +1,29 @@
+import newrelic.agent
 import math
+import os
+
+# try catch for failure on no evnironment variable NEW_RELIC_CONFIG_FILE 
+try:
+    if os.getenv('NEW_RELIC_CONFIG_FILE') is None:
+        print("No NEW_RELIC_CONFIG_FILE environment variable found. Not starting New Relic agent.")
+        raise Exception("No NEW_RELIC_CONFIG_FILE environment variable found. Not starting the game.")
+    else:
+        print("Starting New Relic agent.")
+        newrelic.agent.initialize() #This is required! [RLF]
+except Exception as error:
+    print(error)
+    sys.exit(1)
+    
+    
 
 from classes import *
-from os import listdir
-from os.path import isfile, join
-
-'''
-Tile and gfxs
-'''
-
-## split a string separating numbers from letters
-def splitStringIntoLettersAndNumbers(string):
-    split_string = []
-    sub_string = ""
-    index = 0
-
-    while index < len(string):
-        if string[index].isalpha():
-            while index < len(string) and string[index].isalpha():
-                sub_string += string[index]
-                index += 1
-        elif string[index].isdigit():
-             while index < len(string) and string[index].isdigit():
-                sub_string += string[index]
-                index += 1
-        else:
-            index += 1
-        split_string.append(sub_string)
-        sub_string = ""
-
-    return split_string
-
-
-## get name and size properties from filename
-def graphicPropertiesFromFilename(filename):
-    split_filename = splitStringIntoLettersAndNumbers(filename)
-
-    name = split_filename[0]
-    height = int(split_filename[3])
-    width = int(split_filename[1])
-
-    return (name, height, width)
-
-## returns dictionary
-def load_game_tiles():
-    game_tiles = [file for file in listdir("tiles/game/") if isfile(join("tiles/game/", file))] #load all the image files within the directory
-    ui_tiles = [file for file in listdir("tiles/ui/") if isfile(join("tiles/ui/", file))]
-
-    game_tile_dict = {} #init dictionary
-    ui_tile_dict = {}
-    
-    #save game tiles
-    for savedfile in game_tiles:
-        image = pygame.image.load("tiles/game/" + savedfile).convert_alpha()
-
-        tile_name, tile_height, tile_width = graphicPropertiesFromFilename(savedfile)
-
-        game_tile_dict[tile_name] = (image, tile_height, tile_width)
-
-    #save ui tiles
-    for savedfile in ui_tiles:
-        image = pygame.image.load("tiles/ui/" + savedfile).convert_alpha()
-
-        tile_name, tile_height, tile_width = graphicPropertiesFromFilename(savedfile)
-
-        ui_tile_dict[tile_name] = (image, tile_height, tile_width)        
-        
-    return game_tile_dict, ui_tile_dict
+from functional import *
 
 '''
 Interpic
 '''
 
+@newrelic.agent.background_task()
 def showTitleScreen(screen, tileset, ui_tiles):
     clock = pygame.time.Clock()
     
@@ -120,6 +73,7 @@ def showTitleScreen(screen, tileset, ui_tiles):
         
     return False
 
+@newrelic.agent.background_task()
 def showInterpic(completed_levels, screen, GamePlayer, tileset, ui_tileset):
     clock = pygame.time.Clock()
     
@@ -174,6 +128,7 @@ def showInterpic(completed_levels, screen, GamePlayer, tileset, ui_tileset):
         
     return False
 
+@newrelic.agent.background_task()
 def showWarpZone(completed_levels, screen, GamePlayer, tileset, ui_tileset):
     clock = pygame.time.Clock()
     
@@ -214,6 +169,7 @@ def showWarpZone(completed_levels, screen, GamePlayer, tileset, ui_tileset):
     return False
     
     
+@newrelic.agent.background_task()
 def getBonusMapping(current_level):
     if current_level == 2: return 6
     elif current_level == 5: return 2
@@ -225,12 +181,15 @@ def getBonusMapping(current_level):
     elif current_level == 1: return 11
     else: return 1
     
+@newrelic.agent.background_task()
 def showScores(screen, tileset):
     pass
     
+@newrelic.agent.background_task()
 def savePlayerScore(player_score, screen, tileset):
     pass
         
+@newrelic.agent.background_task()
 def showCreditsScreen(screen, tileset):
     pass
    
@@ -248,7 +207,7 @@ def main():
     game_screen = Screen(SCREEN_WIDTH, SCREEN_HEIGHT)
     
     ##Init tiles
-    tileset, ui_tileset = load_game_tiles()
+    tileset, ui_tileset = load_all_tiles()
     game_open = True
     
     while game_open:
@@ -315,6 +274,10 @@ def main():
                             game_open = False
                             ended_level = True
                             ended_game = True
+                            # Record custom New Relic event [RLF]
+                            event_type = "GameComplete" 
+                            params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
+                            newrelic.agent.record_custom_event(event_type, params, application=application)
                         # use something from the inventory
                         elif event.key in inv_keys:
                             if GamePlayer.inventoryInput(inv_keys.index(event.key)) and not friendly_shot:
@@ -346,7 +309,6 @@ def main():
                     break;
                 # if the player died, spawn death puff and respawn player (if he has enough lives)
                 elif GamePlayer.getCurrentState() == STATE.DESTROY:
-                    ''' TODO: REFACTOR '''
                     if death_timer == -1:
                         GamePlayer.takeLife()
                         DeathPuff = AnimatedTile("explosion", 0)
@@ -367,6 +329,10 @@ def main():
                         else:
                             ended_level = True
                             ended_game = True
+                            # Record custom New Relic event [RLF]
+                            event_type = "GameComplete" 
+                            params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
+                            newrelic.agent.record_custom_event(event_type, params, application=application)
                     
                 # if the player is close enough to one of the screen boundaries, move the screen.
                 player_close_to_left_boundary = (player_position_x <= game_screen.getXPositionInPixelsUnscaled() + BOUNDARY_DISTANCE_TRIGGER)
@@ -423,6 +389,11 @@ def main():
                 pygame.event.pump() 
                 clock.tick(200)
 
+            # Record custom New Relic event [RLF]
+            event_type = "LevelUp" 
+            params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
+            newrelic.agent.record_custom_event(event_type, params, application=application)
+
             # Onto the next level
             GamePlayer.clearInventory()
             if (player_position_x == -2):
@@ -433,10 +404,17 @@ def main():
                 current_spawner_id = 0
             else:
                 current_level_number += 1
+
+            GamePlayer.setCurrentLevelNumber(current_level_number)
                 
             if current_level_number > NUM_OF_LEVELS and ended_level and not ended_game:
                 showCreditsScreen(game_screen, tileset)
                 ended_game = True
+                # Record custom New Relic event [RLF]
+                event_type = "GameComplete" 
+                current_level_number -= 1
+                params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
+                newrelic.agent.record_custom_event(event_type, params, application=application)
             elif ended_level and current_spawner_id == 1:
                 option = showWarpZone(current_level_number, game_screen, GamePlayer, tileset, ui_tileset)
                 ended_game = option
@@ -452,5 +430,9 @@ def main():
     pygame.quit()
     quit()
 
+application = newrelic.agent.register_application(timeout=5) # force New Relic agent registration [RLF]
+
 if __name__ == "__main__":
     main()
+
+newrelic.agent.shutdown_agent(timeout=2.5) # shutdown New Relic agent [RLF]
