@@ -275,7 +275,7 @@ def main():
                             ended_level = True
                             ended_game = True
                             # Record custom New Relic event [RLF]
-                            event_type = "GameComplete" 
+                            event_type = "GameIncomplete" 
                             params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
                             newrelic.agent.record_custom_event(event_type, params, application=application)
                         # use something from the inventory
@@ -330,7 +330,7 @@ def main():
                             ended_level = True
                             ended_game = True
                             # Record custom New Relic event [RLF]
-                            event_type = "GameComplete" 
+                            event_type = "GameIncomplete" 
                             params = {'current_level': current_level_number, 'player_score': GamePlayer.score} 
                             newrelic.agent.record_custom_event(event_type, params, application=application)
                     
