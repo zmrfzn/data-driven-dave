@@ -1,7 +1,7 @@
 ![New Relic logo](https://newrelic.com/static-assets/images/logo/nr-logo-50vh.png)
 
 ## Win in 3 easy steps
-1. Download the latest release and complete the prerequisites below including the New Relic instrumentation.
+1. Download the [latest release](https://github.com/zmrfzn/data-driven-dave/releases) and complete the prerequisites below including the New Relic instrumentation.
 2. Play the game, and stop by the **New Relic** booth to show off your game stats dashboard. (you will be rewarded for this effort)
 3. If you have the high score, you win the grand prize!
 
