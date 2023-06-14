@@ -12,7 +12,7 @@
           "layout": {
             "column": 1,
             "row": 1,
-            "width": 6,
+            "width": 5,
             "height": 3
           },
           "linkedEntityGuids": null,
@@ -26,7 +26,7 @@
         {
           "title": "Games Played",
           "layout": {
-            "column": 7,
+            "column": 6,
             "row": 1,
             "width": 2,
             "height": 3
@@ -44,7 +44,7 @@
                 "accountIds": [
                   YOUR_ACCOUNT_ID
                 ],
-                "query": "SELECT count(*) AS 'Games' FROM GameComplete WHERE appName = 'Data Driven Dave' SINCE 1 hour ago"
+                "query": "SELECT count(*) AS 'Completed Games' FROM GameComplete WHERE appName = 'Data Driven Dave' SINCE 1 hour ago"
               }
             ],
             "platformOptions": {
@@ -53,11 +53,11 @@
           }
         },
         {
-          "title": "Top Score Achieved",
+          "title": "Top Score Achieved (Completed Games)",
           "layout": {
-            "column": 9,
+            "column": 8,
             "row": 1,
-            "width": 4,
+            "width": 3,
             "height": 3
           },
           "linkedEntityGuids": null,
@@ -73,7 +73,36 @@
                 "accountIds": [
                   YOUR_ACCOUNT_ID
                 ],
-                "query": "SELECT max(player_score) FROM GameIncomplete WHERE appName = 'Data Driven Dave' SINCE 1 hour ago"
+                "query": "SELECT max(player_score) as 'Completed Games Max Score' FROM GameComplete  WHERE appName = 'Data Driven Dave' SINCE 1 hour ago"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Total Score (Incomplete Games)",
+          "layout": {
+            "column": 11,
+            "row": 1,
+            "width": 2,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [
+                  YOUR_ACCOUNT_ID
+                ],
+                "query": "SELECT max(player_score) as 'Incomplete Games Max Score' FROM GameIncomplete  WHERE appName = 'Data Driven Dave' SINCE 1 hour ago"
               }
             ],
             "platformOptions": {
