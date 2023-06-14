@@ -1,7 +1,7 @@
 import newrelic.agent
 import math
 
-newrelic.agent.initialize('newrelic.ini') #This is required! [RLF]
+newrelic.agent.initialize() #This is required! [RLF]
 
 from classes import *
 from functional import *

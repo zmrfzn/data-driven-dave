@@ -22,7 +22,7 @@ We hope you enjoy!
 - You will need to install the following packages using `pip` before starting the program. You may wish to install these packages in a [virtual environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/).
   - pygame (e.g. `pip3 install pygame`)
   - newrelic (e.g. `pip3 install newrelic`)
-> run this command to install all the required packages 
+  > run this command to install all the required packages 
   
   ```pip3 install -r requirements.txt```
 - New Relic instrumentation

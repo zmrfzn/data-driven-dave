@@ -1,6 +1,22 @@
 from os import listdir
+import os
 from os.path import isfile, join
 import pygame
+
+##################################
+## GLOBALS                      ##
+##################################
+
+global TILES_GAME
+global TILES_UI
+global EXE_LOCATION 
+
+EXE_LOCATION = os.path.dirname( os.path.realpath( __file__ ) ) # binary data file location
+
+print("GAME RUNNING FROM DIRECTORY: " + EXE_LOCATION)
+
+TILES_GAME = "data/tiles/game/"
+TILES_UI = "data/tiles/ui/"
 
 ##################################
 ## LIST AND STRING MANIPULATION ##
@@ -70,6 +86,6 @@ def save_all_tiles(folder):
 	return map(lambda tile: save_tile(tile, folder), list_tiles(folder))
 
 def load_all_tiles():
-    return convert_tuples_to_dict(save_all_tiles("tiles/game/")), convert_tuples_to_dict(save_all_tiles("tiles/ui/"))
+    return convert_tuples_to_dict(save_all_tiles(os.path.join(EXE_LOCATION,TILES_GAME))), convert_tuples_to_dict(save_all_tiles(os.path.join(EXE_LOCATION,TILES_UI)))
 
     

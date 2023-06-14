@@ -1,3 +1,4 @@
+import os
 import newrelic.agent
 
 import sys
@@ -9,6 +10,14 @@ import pygame
 '''
 Constants and enumerations
 '''
+
+global EXE_LOCATION 
+
+EXE_LOCATION = os.path.dirname( os.path.realpath( __file__ ) ) # binary data file location
+print("GAME RUNNING FROM DIRECTORY: " + EXE_LOCATION)
+
+
+LEVELS_DATA_FILE = "data/levels/"
 
 TILE_SCALE_FACTOR = 3
 WIDTH_OF_MAP_NODE = 16
@@ -532,7 +541,7 @@ class Map(object):
     @newrelic.agent.background_task()
     def buildLevel(self, level_number):
         # open the level in the txt
-        textmap = open("levels/" + str(level_number) + ".txt", 'r')
+        textmap = open(os.path.join(EXE_LOCATION,LEVELS_DATA_FILE) + str(level_number) + ".txt", 'r')
 
         # get height (must reset offset)
         self.height = len(textmap.readlines())
