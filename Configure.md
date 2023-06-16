@@ -7,7 +7,7 @@
 
 ## Prerequisites
 
-- You'll need a New Relic account. The good news is that you can create a [free account here](https://newrelic.com/signup) (no credit card required).
+- You'll need a New Relic account. The good news is that you can create a [free account here](https://newrelic.com/signup?utm_source=event&utm_medium=community&utm_campaign=apj-fy-24-q1-devrel-kcdmumbai) (no credit card required).
 - To run the game on your machine you will need the following:
   - ENV VAR named `NEW_RELIC_CONFIG_FILE` with the value of absolute path to the file `newrelic.ini` on your system (e.g. `export NEW_RELIC_CONFIG_FILE=/Users/username/Downloads/dangerous-dave/newrelic.ini`)
   
@@ -20,12 +20,13 @@
 
 ## Running the program
 
-Simply Double click or run the executable file from your favorite terminal `data-dave-win.exe` `data-dave-mac` on your machine.
+Simply Double click (Windows) or run the executable file from your favorite terminal `data-dave-linux.exe` `data-dave-mac` on your machine.
 
-## Misc
+## Troubleshooting
 
 - If the game is crashing or you are unable to run the game, make sure you have complete the prerequisites above especially the ENV VAR and adding New Relic License Key to the `newrelic.ini` file.
+- After adding the ENV VAR (`export NEW_RELIC_CONFIG_FILE=/Users/username/Downloads/dangerous-dave/newrelic.ini`), launch the game using the binary from the same terminal instance. Alternatively you can add the ENV VAR to your `.bashrc`, `.zshrc` or `.bash_profile` file and restart your terminal session.
 
-## ![New Relic logo icon](https://newrelic.com/static-assets/images/icons/avatar-newrelic.png) New Relic DevOpsDays Challenge
+## ![New Relic logo icon](https://newrelic.com/static-assets/images/icons/avatar-newrelic.png) New Relic Kubernetes Community Days Challenge
 
 

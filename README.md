@@ -17,7 +17,7 @@ We hope you enjoy!
 
 ## Prerequisites
 
-- You'll need a New Relic account. The good news is that you can create a [free account here](https://newrelic.com/signup) (no credit card required).
+- You'll need a New Relic account. The good news is that you can create a [free account here](https://newrelic.com/signup?utm_source=event&utm_medium=community&utm_campaign=apj-fy-24-q1-devrel-kcdmumbai) (no credit card required).
 - To compile the program, you must have Python 3 installed.
 - You will need to install the following packages using `pip` before starting the program. You may wish to install these packages in a [virtual environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/).
   - pygame (e.g. `pip3 install pygame`)
